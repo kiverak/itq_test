@@ -2,6 +2,7 @@ package com.example.itq.controller;
 
 import com.example.itq.dto.*;
 import com.example.itq.service.DocumentService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -43,12 +44,12 @@ public class DocumentController {
     }
 
     @PostMapping("/submit")
-    public ResponseEntity<List<TransitionResult>> submitForApproval(@RequestBody TransitionRequest request) {
+    public ResponseEntity<List<TransitionResult>> submitForApproval(@Valid @RequestBody TransitionRequest request) {
         return ResponseEntity.ok(documentService.submitDocumentsForApproval(request));
     }
 
     @PostMapping("/approve")
-    public ResponseEntity<List<TransitionResult>> approve(@RequestBody TransitionRequest request) {
+    public ResponseEntity<List<TransitionResult>> approve(@Valid @RequestBody TransitionRequest request) {
         return ResponseEntity.ok(documentService.approveDocuments(request));
     }
 }
