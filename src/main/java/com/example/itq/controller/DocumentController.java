@@ -5,6 +5,8 @@ import com.example.itq.service.DocumentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,9 +26,7 @@ public class DocumentController {
 
     @GetMapping("/{id}")
     public ResponseEntity<DocumentWithHistoryResponse> getDocument(@PathVariable Long id) {
-        return documentService.getDocumentWithHistory(id)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+        return ResponseEntity.ok(documentService.getDocumentWithHistory(id));
     }
 
     @GetMapping
@@ -35,8 +35,11 @@ public class DocumentController {
     }
 
     @PostMapping("/batch")
-    public ResponseEntity<List<DocumentResponse>> getDocumentsByIds(@RequestBody BatchDocumentRequest request) {
-        return ResponseEntity.ok(documentService.getDocumentsByIds(request.getIds()));
+    public ResponseEntity<Page<DocumentResponse>> getDocumentsByIds(
+            @RequestBody BatchDocumentRequest request,
+            @PageableDefault(size = 10, sort = "uniqueNumber", direction = Sort.Direction.ASC) Pageable pageable
+    ) {
+        return ResponseEntity.ok(documentService.getDocumentsByIds(request, pageable));
     }
 
     @PostMapping("/submit")
