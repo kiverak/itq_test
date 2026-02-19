@@ -4,8 +4,10 @@ import com.example.itq.dto.*;
 import com.example.itq.exception.ResourceNotFoundException;
 import com.example.itq.mapper.DocumentHistoryMapper;
 import com.example.itq.mapper.DocumentMapper;
-import com.example.itq.model.*;
-import com.example.itq.repository.ApprovalRegistryRepository;
+import com.example.itq.model.Document;
+import com.example.itq.model.DocumentAction;
+import com.example.itq.model.DocumentHistory;
+import com.example.itq.model.DocumentStatus;
 import com.example.itq.repository.DocumentHistoryRepository;
 import com.example.itq.repository.DocumentRepository;
 import lombok.RequiredArgsConstructor;
@@ -26,9 +28,9 @@ public class DocumentServiceImpl implements DocumentService {
 
     private final DocumentRepository documentRepository;
     private final DocumentHistoryRepository documentHistoryRepository;
-    private final ApprovalRegistryRepository approvalRegistryRepository;
     private final DocumentMapper documentMapper;
     private final DocumentHistoryMapper documentHistoryMapper;
+    private final DocumentApprovingService documentApprovingService;
 
     @Override
     @Transactional
@@ -117,7 +119,6 @@ public class DocumentServiceImpl implements DocumentService {
     }
 
     @Override
-    @Transactional
     public List<TransitionResult> approveDocuments(TransitionRequest request) {
         List<Document> docs = documentRepository.findAllById(request.getDocumentIds());
 
@@ -134,30 +135,14 @@ public class DocumentServiceImpl implements DocumentService {
 
         for (Long id : request.getDocumentIds()) {
             Document doc = docMap.get(id);
-
             TransitionResult result = new TransitionResult();
-            result.setDocumentId(id);
-
-            if (doc == null) {
-                result.setStatus(TransitionStatus.NOT_FOUND);
-            } else if (doc.getStatus() != DocumentStatus.SUBMITTED) {
-                result.setStatus(TransitionStatus.CONFLICT);
-            } else {
-                doc.setStatus(DocumentStatus.APPROVED);
-                result.setStatus(TransitionStatus.SUCCESS);
-
-                DocumentHistory history = new DocumentHistory();
-                history.setDocument(doc);
-                history.setAction(DocumentAction.APPROVE);
-                history.setInitiator(request.getInitiator());
-                history.setComment(request.getComment());
-                documentHistoryRepository.save(history);
-
-                ApprovalRegistry approvalRegistry = new ApprovalRegistry();
-                approvalRegistry.setDocument(doc);
-                approvalRegistryRepository.save(approvalRegistry);
+            try {
+                result = documentApprovingService.approveDocument(id, doc, request.getInitiator(), request.getComment());
+            } catch (Exception e) {
+                result.setDocumentId(id);
+                result.setStatus(TransitionStatus.REGISTRY_ERROR);
+                // TODO add logging
             }
-
             results.add(result);
         }
 
