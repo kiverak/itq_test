@@ -46,6 +46,22 @@ cd document-generator
 python3 generate.py
 ```
 
+### Проверка прогресса по логам
+
+SUBMIT-worker
+Регулярно проверяет БД и отправляет документы со статусом DRAFT на согласование пачками по batchSize
+
+```
+SUBMIT-worker: processed=100, success=100, failed=0
+```
+
+APPROVE-worker
+Регулярно проверяет БД и отправляет документы со статусом SUBMITTED на утверждение пачками по batchSize
+
+```
+APPROVE-worker: processed=100, success=100, failed=0
+```
+
 ### Чтобы сервис уверенно работал с запросами 5000+ id возможны различные решения:
 
 - Передавать ID через временную таблицу, а в запросе на чтение использовать JOIN вместо WHERE IN;
