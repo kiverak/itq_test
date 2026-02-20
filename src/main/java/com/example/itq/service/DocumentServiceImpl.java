@@ -231,8 +231,8 @@ public class DocumentServiceImpl implements DocumentService {
 
         Sort validatedSort = validateSort(pageable.getSort());
         Pageable validatedPageable = PageRequest.of(
-                Math.max(pageable.getPageNumber(), 0),
-                pageable.getPageSize() < 1 ? 10 : pageable.getPageSize(),
+                pageable.getPageNumber(),
+                pageable.getPageSize(),
                 validatedSort
         );
 
