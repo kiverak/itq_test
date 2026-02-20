@@ -1,0 +1,40 @@
+databaseChangeLog:
+  - changeSet:
+      id: 2
+      author: vitaliy
+      changes:
+        - createIndex:
+            indexName: idx_document_status_created_at
+            tableName: document
+            columns:
+              - column:
+                  name: status
+              - column:
+                  name: created_at
+                  descending: true
+        - createIndex:
+            indexName: idx_document_unique_number
+            tableName: document
+            unique: true
+            columns:
+              - column:
+                  name: unique_number
+        - createIndex:
+            indexName: idx_document_author
+            tableName: document
+            columns:
+              - column:
+                  name: author
+        - createIndex:
+            indexName: idx_document_history_document_id
+            tableName: document_history
+            columns:
+              - column:
+                  name: document_id
+        - createIndex:
+            indexName: idx_document_history_timestamp
+            tableName: document_history
+            columns:
+              - column:
+                  name: timestamp
+                  descending: true
