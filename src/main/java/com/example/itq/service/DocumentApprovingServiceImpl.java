@@ -5,20 +5,25 @@ import com.example.itq.dto.TransitionStatus;
 import com.example.itq.model.*;
 import com.example.itq.repository.ApprovalRegistryRepository;
 import com.example.itq.repository.DocumentHistoryRepository;
+import com.example.itq.repository.DocumentRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
 public class DocumentApprovingServiceImpl implements DocumentApprovingService {
 
+    private final DocumentRepository documentRepository;
     private final DocumentHistoryRepository documentHistoryRepository;
     private final ApprovalRegistryRepository approvalRegistryRepository;
 
     @Override
-    @Transactional
-    public TransitionResult approveDocument(Long id, Document document, String initiator, String comment) throws Exception {
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    public TransitionResult approveDocument(Long id, String initiator, String comment) {
+        Document document = documentRepository.findById(id) .orElse(null);
+
         TransitionResult result = new TransitionResult();
         result.setDocumentId(id);
 

@@ -11,10 +11,11 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.Instant;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/documents")
+@RequestMapping("/api/v1/documents")
 @RequiredArgsConstructor
 public class DocumentController {
 
@@ -35,6 +36,16 @@ public class DocumentController {
         return ResponseEntity.ok(documentService.getAllDocuments(pageable));
     }
 
+    @GetMapping("/search")
+    public ResponseEntity<Page<DocumentResponse>> search(@RequestParam(required = false) String author,
+                                                         @RequestParam(required = false) String status,
+                                                         @RequestParam(required = false) Instant from,
+                                                         @RequestParam(required = false) Instant to,
+                                                         Pageable pageable) {
+        return ResponseEntity.ok(documentService.search(author, status, from, to, pageable)
+        );
+    }
+
     @PostMapping("/batch")
     public ResponseEntity<Page<DocumentResponse>> getDocumentsByIds(
             @RequestBody BatchDocumentRequest request,
@@ -51,5 +62,12 @@ public class DocumentController {
     @PostMapping("/approve")
     public ResponseEntity<List<TransitionResult>> approve(@Valid @RequestBody TransitionRequest request) {
         return ResponseEntity.ok(documentService.approveDocuments(request));
+    }
+
+    @PostMapping("/parallel-approve")
+    public ResponseEntity<ParallelApproveSummary> parallelApprove(@Valid @RequestBody TransitionRequest request,
+                                                                  @RequestParam(defaultValue = "3") int threads,
+                                                                  @RequestParam(defaultValue = "3") int attempts) {
+        return ResponseEntity.ok(documentService.parallelApprove(request, threads, attempts));
     }
 }

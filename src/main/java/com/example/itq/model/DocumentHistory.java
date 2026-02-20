@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 
 @Entity
 @Getter
@@ -21,7 +21,7 @@ public class DocumentHistory {
 
     private String initiator;
 
-    private LocalDateTime timestamp;
+    private Instant timestamp;
 
     @Enumerated(EnumType.STRING)
     private DocumentAction action;
@@ -30,6 +30,6 @@ public class DocumentHistory {
 
     @PrePersist
     protected void onCreate() {
-        this.timestamp = LocalDateTime.now();
+        this.timestamp = Instant.now();
     }
 }

@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 
 @Entity
 @Getter
@@ -19,10 +19,10 @@ public class ApprovalRegistry {
     @JoinColumn(name = "document_id", nullable = false)
     private Document document;
 
-    private LocalDateTime approvalDate;
+    private Instant approvalDate;
 
     @PrePersist
     protected void onCreate() {
-        this.approvalDate = LocalDateTime.now();
+        this.approvalDate = Instant.now();
     }
 }

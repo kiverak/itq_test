@@ -8,5 +8,5 @@ import org.springframework.data.domain.Pageable;
 import java.util.List;
 
 public interface DocumentApprovingService {
-    TransitionResult approveDocument(Long id, Document document, String initiator, String comment) throws Exception;
+    TransitionResult approveDocument(Long id, String initiator, String comment);
 }

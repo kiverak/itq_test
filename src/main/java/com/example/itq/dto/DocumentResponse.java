@@ -2,7 +2,8 @@ package com.example.itq.dto;
 
 import com.example.itq.model.DocumentStatus;
 import lombok.Data;
-import java.time.LocalDateTime;
+
+import java.time.Instant;
 
 @Data
 public class DocumentResponse {
@@ -11,6 +12,6 @@ public class DocumentResponse {
     private String author;
     private String title;
     private DocumentStatus status;
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
+    private Instant createdAt;
+    private Instant updatedAt;
 }
