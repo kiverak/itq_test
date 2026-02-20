@@ -90,7 +90,7 @@ public class DocumentServiceImpl implements DocumentService {
 
     @Override
     @Transactional
-    public List<TransitionResult> submitDocumentsForApproval(TransitionRequest request) {
+    public List<TransitionResult> submitDocuments(TransitionRequest request) {
         List<Document> docs = documentRepository.findAllById(request.getDocumentIds());
 
         Map<Long, Document> docMap = new HashMap<>();

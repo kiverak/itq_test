@@ -13,7 +13,7 @@ public interface DocumentService {
     DocumentWithHistoryResponse getDocumentWithHistory(Long id);
     Page<DocumentResponse> getDocumentsByIds(BatchDocumentRequest request, Pageable pageable);
     Page<DocumentResponse> getAllDocuments(Pageable pageable);
-    List<TransitionResult> submitDocumentsForApproval(TransitionRequest request);
+    List<TransitionResult> submitDocuments(TransitionRequest request);
     List<TransitionResult> approveDocuments(TransitionRequest request);
     ParallelApproveSummary parallelApprove(@Valid TransitionRequest request, int threads, int attempts);
     Page<DocumentResponse> search(String author, String status, Instant from, Instant to, Pageable pageable);

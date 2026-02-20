@@ -56,7 +56,7 @@ public class DocumentController {
 
     @PostMapping("/submit")
     public ResponseEntity<List<TransitionResult>> submitForApproval(@Valid @RequestBody TransitionRequest request) {
-        return ResponseEntity.ok(documentService.submitDocumentsForApproval(request));
+        return ResponseEntity.ok(documentService.submitDocuments(request));
     }
 
     @PostMapping("/approve")

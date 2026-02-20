@@ -12,3 +12,8 @@ spring:
     show-sql: true
   liquibase:
     change-log: classpath:db/changelog/db.changelog-master.yaml
+
+processing:
+  batch-size: 100
+  submit-interval-ms: 5000
+  approve-interval-ms: 5000
