@@ -1,11 +1,8 @@
 spring:
   application:
     name: ITQ
-  datasource:
-    url: jdbc:postgresql://localhost:5432/itq
-    username: postgres
-    password: postgres
-    driver-class-name: org.postgresql.Driver
+  profiles:
+    active: docker
   jpa:
     hibernate:
       ddl-auto: validate
